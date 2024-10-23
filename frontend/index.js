@@ -61,17 +61,15 @@ Arrow functions have a few notable features:
       especially when dealing with callbacks and event handlers.
 */
 
-
-// fetch call is to call the backend
+// Fetch call is to call the backend
 document.addEventListener('DOMContentLoaded', function() {
-    // one can point your browser to http://localhost:5050/getAll to check what it returns first.
+    // One can point your browser to http://localhost:5050/getAll to check what it returns first.
     fetch('http://localhost:5050/getAll')     
     .then(response => response.json())
     .then(data => loadHTMLTable(data['data']));
 });
 
-
-// when the addBtn is clicked
+// When the addBtn is clicked
 const addBtn = document.querySelector('#add-name-btn');
 addBtn.onclick = function (){
     const nameInput = document.querySelector('#name-input');
@@ -89,7 +87,7 @@ addBtn.onclick = function (){
     .then(data => insertRowIntoTable(data['data']));
 }
 
-// when the searchBtn is clicked
+// When the searchBtn is clicked
 const searchBtn =  document.querySelector('#search-btn');
 searchBtn.onclick = function (){
     const searchInput = document.querySelector('#search-input');
@@ -103,38 +101,30 @@ searchBtn.onclick = function (){
 
 let rowToDelete; 
 
-// when the delete button is clicked, since it is not part of the DOM tree, we need to do it differently
-document.querySelector('table tbody').addEventListener('click', 
-      function(event){
-        if(event.target.className === "delete-row-btn"){
-
-            deleteRowById(event.target.dataset.id);   
-            rowToDelete = event.target.parentNode.parentNode.rowIndex;    
-            debug("delete which one:");
-            debug(rowToDelete);
-        }   
-        if(event.target.className === "edit-row-btn"){
-            showEditRowInterface(event.target.dataset.id); // display the edit row interface
-        }
-      }
-);
+// When the delete button is clicked, since it is not part of the DOM tree, we need to do it differently
+document.querySelector('table tbody').addEventListener('click', function(event){
+    if(event.target.className === "delete-row-btn"){
+        deleteRowById(event.target.dataset.id);   
+        rowToDelete = event.target.parentNode.parentNode.rowIndex;    
+        debug("delete which one:");
+        debug(rowToDelete);
+    }   
+    if(event.target.className === "edit-row-btn"){
+        showEditRowInterface(event.target.dataset.id); // display the edit row interface
+    }
+});
 
 function deleteRowById(id){
-    // debug(id);
-    fetch('http://localhost:5050/delete/' + id,
-       { 
+    fetch('http://localhost:5050/delete/' + id, { 
         method: 'DELETE'
-       }
-    )
+    })
     .then(response => response.json())
-    .then(
-         data => {
-             if(data.success){
-                document.getElementById("table").deleteRow(rowToDelete);
-                // location.reload();
-             }
-         }
-    );
+    .then(data => {
+        if(data.success){
+            document.getElementById("table").deleteRow(rowToDelete);
+            // location.reload();
+        }
+    });
 }
 
 let idToUpdate = 0;
@@ -143,16 +133,15 @@ function showEditRowInterface(id){
     debug("id clicked: ");
     debug(id);
     document.querySelector('#update-name-input').value = ""; // clear this field
-    const updateSetction = document.querySelector("#update-row");  
-    updateSetction.hidden = false;
-    // we assign the id to the update button as its id attribute value
+    const updateSection = document.querySelector("#update-row");  
+    updateSection.hidden = false;
+    // We assign the id to the update button as its id attribute value
     idToUpdate = id;
     debug("id set!");
-    debug(idToUpdate+"");
+    debug(idToUpdate + "");
 }
 
-
-// when the update button on the update interface is clicked
+// When the update button on the update interface is clicked
 const updateBtn = document.querySelector('#update-row-btn');
 
 updateBtn.onclick = function(){
@@ -162,130 +151,159 @@ updateBtn.onclick = function(){
     
     const updatedNameInput = document.querySelector('#update-name-input');
 
-    fetch('http://localhost:5050/update',
-          {
-            headers: {
-                'Content-type': 'application/json'
-            },
-            method: 'PATCH',
-            body: JSON.stringify(
-                  {
-                    id: idToUpdate,
-                    name: updatedNameInput.value
-                  }
-            )
-          }
-    ) 
+    fetch('http://localhost:5050/update', {
+        headers: {
+            'Content-type': 'application/json'
+        },
+        method: 'PATCH',
+        body: JSON.stringify({
+            id: idToUpdate,
+            name: updatedNameInput.value
+        })
+    }) 
     .then(response => response.json())
     .then(data => {
         if(data.success){
             location.reload();
-        }
-        else 
+        } else {
            debug("no update occurs");
-    })
+        }
+    });
 }
 
-
-// this function is used for debugging only, and should be deleted afterwards
-function debug(data)
-{
+// This function is used for debugging only, and should be deleted afterwards
+function debug(data) {
     fetch('http://localhost:5050/debug', {
         headers: {
             'Content-type': 'application/json'
         },
         method: 'POST',
         body: JSON.stringify({debug: data})
-    })
+    });
 }
 
-function insertRowIntoTable(data){
+function insertRowIntoTable(data) {
+    debug("index.js: insertRowIntoTable called: ");
+    debug(data);
 
-   debug("index.js: insertRowIntoTable called: ");
-   debug(data);
+    const table = document.querySelector('table tbody');
+    const isTableData = table.querySelector('.no-data');
 
-   const table = document.querySelector('table tbody');
-   debug(table);
-
-   const isTableData = table.querySelector('.no-data');
-
-  // debug(isTableData);
-
-   let tableHtml = "<tr>";
+    let tableHtml = "<tr>";
    
-   for(var key in data){ // iterating over the each property key of an object data
-      if(data.hasOwnProperty(key)){   // key is a direct property for data
-            if(key === 'dateAdded'){  // the property is 'dataAdded'
-                data[key] = new Date(data[key]).toLocaleString(); // format to javascript string
+    for(var key in data) { // iterating over each property key of an object data
+        if(data.hasOwnProperty(key)) {   // key is a direct property for data
+            if(key === 'dateAdded') {  // the property is 'dataAdded'
+                data[key] = new Date(data[key]).toLocaleString(); // format to JavaScript string
             }
             tableHtml += `<td>${data[key]}</td>`;
-      }
-   }
-
-   tableHtml +=`<td><button class="delete-row-btn" data-id=${data.id}>Delete</td>`;
-   tableHtml += `<td><button class="edit-row-btn" data-id=${data.id}>Edit</td>`;
-
-   tableHtml += "</tr>";
-
-    if(isTableData){
-       debug("case 1");
-       table.innerHTML = tableHtml;
+        }
     }
-    else {
-        debug("case 2");
-        // debug(tableHtml);
 
-        const newrow = table.insertRow();
-        newrow.innerHTML = tableHtml;
+    tableHtml +=`<td><button class="delete-row-btn" data-id=${data.id}>Delete</td>`;
+    tableHtml += `<td><button class="edit-row-btn" data-id=${data.id}>Edit</td>`;
+    tableHtml += "</tr>";
+
+    if(isTableData) {
+        debug("case 1");
+        table.innerHTML = tableHtml;
+    } else {
+        debug("case 2");
+        const newRow = table.insertRow();
+        newRow.innerHTML = tableHtml;
     }
 }
 
-function loadHTMLTable(data){
+function loadHTMLTable(data) {
     debug("index.js: loadHTMLTable called.");
-
     const table = document.querySelector('table tbody'); 
     
-    if(data.length === 0){
+    if(data.length === 0) {
         table.innerHTML = "<tr><td class='no-data' colspan='5'>No Data</td></tr>";
         return;
     }
-  
-    /*
-    In the following JavaScript code, the forEach method is used to iterate over the 
-    elements of the data array. The forEach method is a higher-order function 
-    that takes a callback function as its argument. The callback function is 
-    executed once for each element in the array.
-    
-    In this case, the callback function takes a single argument, which is an object 
-    destructuring pattern:
-
-
-    function ({id, name, date_added}) {
-        // ... code inside the callback function
-    }
-
-    This pattern is used to extract the id, name, and date_added properties from each 
-    element of the data array. The callback function is then executed for each element
-    in the array, and within the function, you can access these properties directly 
-    as variables (id, name, and date_added).
-
-    
-    In summary, the forEach method is a convenient way to iterate over each element in 
-    an array and perform some operation or execute a function for each element. 
-    The provided callback function is what gets executed for each element in the 
-    data array.
-    */
 
     let tableHtml = "";
-    data.forEach(function ({id, name, date_added}){
-         tableHtml += "<tr>";
-         tableHtml +=`<td>${id}</td>`;
-         tableHtml +=`<td>${name}</td>`;
-         tableHtml +=`<td>${new Date(date_added).toLocaleString()}</td>`;
-         tableHtml +=`<td><button class="delete-row-btn" data-id=${id}>Delete</td>`;
-         tableHtml += `<td><button class="edit-row-btn" data-id=${id}>Edit</td>`;
-         tableHtml += "</tr>";
+    data.forEach(function ({id, name, date_added}) {
+        tableHtml += "<tr>";
+        tableHtml +=`<td>${id}</td>`;
+        tableHtml +=`<td>${name}</td>`;
+        tableHtml +=`<td>${new Date(date_added).toLocaleString()}</td>`;
+        tableHtml +=`<td><button class="delete-row-btn" data-id=${id}>Delete</td>`;
+        tableHtml += `<td><button class="edit-row-btn" data-id=${id}>Edit</td>`;
+        tableHtml += "</tr>";
     });
 
     table.innerHTML = tableHtml;
 }
+
+// Selectors for the DOM elements
+const registerBtn = document.getElementById('register-btn');
+const signInBtn = document.getElementById('signIn-btn');
+const searchInput = document.getElementById('search-input');
+const tableBody = document.querySelector('#table tbody');
+const updateRowSection = document.getElementById('update-row');
+const updateNameInput = document.getElementById('update-name-input');
+
+// Register User
+registerBtn.addEventListener('click', () => {
+    const username = document.getElementById('userName-input').value;
+    const password = document.getElementById('password-input').value;
+    const firstName = document.getElementById('firstName-input').value;
+    const lastName = document.getElementById('lastName-input').value;
+    const age = document.getElementById('age-input').value;
+    const salary = document.getElementById('salary-input').value;
+
+    fetch('http://localhost:5050/register', {
+        headers: {
+            'Content-type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({username, password, firstName, lastName, age, salary})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('User registered successfully!');
+            document.getElementById('userName-input').value = '';
+            document.getElementById('password-input').value = '';
+            document.getElementById('firstName-input').value = '';
+            document.getElementById('lastName-input').value = '';
+            document.getElementById('age-input').value = '';
+            document.getElementById('salary-input').value = '';
+        } else {
+            alert('Registration failed. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Error during registration:', error);
+        alert('Registration failed. Please try again.');
+    });
+});
+
+// Sign In User
+signInBtn.addEventListener('click', () => {
+    const username = document.getElementById('userName-input').value;
+    const password = document.getElementById('password-input').value;
+
+    fetch('http://localhost:5050/signIn', {
+        headers: {
+            'Content-type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({username, password})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('User signed in successfully!');
+            // Redirect or perform some action after successful sign-in
+        } else {
+            alert('Sign-in failed. Please check your credentials.');
+        }
+    })
+    .catch(error => {
+        console.error('Error during sign-in:', error);
+        alert('Sign-in failed. Please try again.');
+    });
+});
