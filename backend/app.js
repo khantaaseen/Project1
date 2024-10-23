@@ -15,6 +15,7 @@ app.use(cors());
 app.use(express.json())
 app.use(express.urlencoded({extended: false}));
 
+
 // create
 app.post('/insert', (request, response) => {
     console.log("app: insert a row.");
@@ -32,15 +33,27 @@ app.post('/insert', (request, response) => {
    .catch(err => console.log(err));
 });
 
-//register
-app.post('/register', (req, res) => {
-    const { userName, password, firstName, lastName, age, salary } = req.body;
-    const dayofregistration = new Date().toISOString().slice(0, 10); // registration date
-    const query = 'INSERT INTO Users (userName, password, firstName, lastname, age, salary, dayofregistration) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    db.query(query, [userName, password, firstName, lastName, age, salary,  dayofregistration], (err, result) => {
+// Register endpoint
+app.post('/insert', (req, res) => {
+    const { username, password, firstname, lastname, age, salary } = req.body;
+
+    // Define SQL query
+    const query = "INSERT INTO users (username, password, firstname, lastname, age, salary) VALUES (?, ?, ?, ?, ?, ?)";
+
+    // Execute SQL query
+    db.query(query, [username, password, firstname, lastname, age, salary], (err, result) => {
         if (err) {
-            return res.status(500).send('There was an error in the registration process.');}
-        res.send('Successful registration!');});});
+            console.error(err);
+            res.status(500).json({ error: "Database error" });
+            return;
+        }
+
+        // Respond with the inserted data (returning an id from MySQL)
+        res.json({ data: { id: result.insertId, username, password, firstname, lastname, age, salary } });
+    });
+});
+
+
 // sign in
 app.post('/signin', (req, res) => {
     const { userName, password } = req.body;

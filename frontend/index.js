@@ -69,23 +69,23 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(data => loadHTMLTable(data['data']));
 });
 
-// When the addBtn is clicked
-const addBtn = document.querySelector('#add-name-btn');
-addBtn.onclick = function (){
-    const nameInput = document.querySelector('#name-input');
-    const name = nameInput.value;
-    nameInput.value = "";
+// // When the addBtn is clicked
+// const addBtn = document.querySelector('#add-name-btn');
+// addBtn.onclick = function (){
+//     const nameInput = document.querySelector('#name-input');
+//     const name = nameInput.value;
+//     nameInput.value = "";
 
-    fetch('http://localhost:5050/insert', {
-        headers: {
-            'Content-type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({name: name})
-    })
-    .then(response => response.json())
-    .then(data => insertRowIntoTable(data['data']));
-}
+//     fetch('http://localhost:5050/insert', {
+//         headers: {
+//             'Content-type': 'application/json'
+//         },
+//         method: 'POST',
+//         body: JSON.stringify({name: name})
+//     })
+//     .then(response => response.json())
+//     .then(data => insertRowIntoTable(data['data']));
+// }
 
 // When the searchBtn is clicked
 const searchBtn =  document.querySelector('#search-btn');
@@ -237,73 +237,75 @@ function loadHTMLTable(data) {
     table.innerHTML = tableHtml;
 }
 
-// Selectors for the DOM elements
-const registerBtn = document.getElementById('register-btn');
-const signInBtn = document.getElementById('signIn-btn');
-const searchInput = document.getElementById('search-input');
-const tableBody = document.querySelector('#table tbody');
-const updateRowSection = document.getElementById('update-row');
-const updateNameInput = document.getElementById('update-name-input');
+const addBtn = document.querySelector('#register-btn');
+addBtn.onclick = function () {
+    const usernameInput = document.querySelector('#register-name-input');
+    const passwordInput = document.querySelector('#register-password-input');
+    const firstNameInput = document.querySelector('#firstName-input');
+    const lastNameInput = document.querySelector('#lastName-input');
+    const ageInput = document.querySelector('#age-input');
+    const salaryInput = document.querySelector('#salary-input');
 
-// Register User
-registerBtn.addEventListener('click', () => {
-    const username = document.getElementById('register-name-input').value;
-    const password = document.getElementById('register-password-input').value;
-    const firstName = document.getElementById('firstName-input').value;
-    const lastName = document.getElementById('lastName-input').value;
-    const age = document.getElementById('age-input').value;
-    const salary = document.getElementById('salary-input').value;
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+    const firstname = firstNameInput.value;
+    const lastname = lastNameInput.value;
+    const age = parseInt(ageInput.value); // assuming age is a number
+    const salary = parseFloat(salaryInput.value); // assuming salary is a decimal number
 
-    fetch('http://localhost:5050/register', {
+    // Clear the input fields after getting the values
+    usernameInput.value = "";
+    passwordInput.value = "";
+    firstNameInput.value = "";
+    lastNameInput.value = "";
+    ageInput.value = "";
+    salaryInput.value = "";
+
+    fetch('http://localhost:5050/insert', {
         headers: {
             'Content-type': 'application/json'
         },
         method: 'POST',
-        body: JSON.stringify({username, password, firstName, lastName, age, salary})
+        body: JSON.stringify({
+            username: username,
+            password: password,
+            firstname: firstname,
+            lastname: lastname,
+            age: age,
+            salary: salary
+        })
     })
     .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('User registered successfully!');
-            document.getElementById('register-name-input').value = '';
-            document.getElementById('register-password-input').value = '';
-            document.getElementById('firstName-input').value = '';
-            document.getElementById('lastName-input').value = '';
-            document.getElementById('age-input').value = '';
-            document.getElementById('salary-input').value = '';
-        } else {
-            alert('Registration failed. Please try again.');
-        }
-    })
-    .catch(error => {
-        console.error('Error during registration:', error);
-        alert('Registration failed. Please try again.');
-    });
-});
+    .then(data => insertRowIntoTable(data['data']));
+}
+
+
 
 // Sign In User
-signInBtn.addEventListener('click', () => {
-    const username = document.getElementById('userName-input').value;
-    const password = document.getElementById('password-input').value;
+if (signInBtn) {
+    signInBtn.addEventListener('click', () => {
+        const username = document.getElementById('userName-input').value;
+        const password = document.getElementById('password-input').value;
 
-    fetch('http://localhost:5050/signIn', {
-        headers: {
-            'Content-type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({username, password})
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('User signed in successfully!');
-            // Redirect or perform some action after successful sign-in
-        } else {
-            alert('Sign-in failed. Please check your credentials.');
-        }
-    })
-    .catch(error => {
-        console.error('Error during sign-in:', error);
-        alert('Sign-in failed. Please try again.');
+        fetch('http://localhost:5050/signIn', {
+            headers: {
+                'Content-type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({username, password})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('User signed in successfully!');
+                // Redirect or perform some action after successful sign-in
+            } else {
+                alert('Sign-in failed. Please check your credentials.');
+            }
+        })
+        .catch(error => {
+            console.error('Error during sign-in:', error);
+            alert('Sign-in failed. Please try again.');
+        });
     });
-});
+}
