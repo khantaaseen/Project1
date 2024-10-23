@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="stylesheet.css">
+  <!-- <link rel="stylesheet" href="stylesheet.css"> -->
   <title>User Management System</title>
 </head>
 <body>
@@ -13,20 +13,20 @@
 
     <!-- User Registration Section -->
     <section>
-        <h2>Register</h2>
-        <label for="register-name-input">Username:</label>
+      <h2>Register</h2>
+      <label for="register-name-input">UserId:</label>
         <input type="text" id="register-name-input" placeholder="Enter your username" required>
-        <label for="register-password-input">Password:</label>
+      <label for="register-password-input">Password:</label>
         <input type="password" id="register-password-input" placeholder="Enter your password" required>
-        <label for="firstName-input">First Name:</label>
+      <label for="firstName-input">First Name:</label>
         <input type="text" id="firstName-input" placeholder="Enter your first name" required>
-        <label for="lastName-input">Last Name:</label>
+      <label for="lastName-input">Last Name:</label>
         <input type="text" id="lastName-input" placeholder="Enter your last name" required>
-        <label for="age-input">Age:</label>
+      <label for="age-input">Age:</label>
         <input type="number" id="age-input" placeholder="Enter your age" min="0" required>
-        <label for="salary-input">Salary:</label>
+      <label for="salary-input">Salary:</label>
         <input type="number" id="salary-input" placeholder="Enter your salary" min="0" required>
-        <button id="register-btn">Register</button>
+      <button id="register-btn">Register</button>
     </section>
 
     <!-- User Sign In Section -->
@@ -38,77 +38,81 @@
       <input type="password" id="signInPassword-input" placeholder="Enter your password" required>
       <button id="signIn-btn">Sign In</button>
     </section>
-<!-- Search User Section -->
-<section>
-  <h2>Search User</h2>
+    
+    <!-- Search User Section -->
+    <section>
+    <h2>Search User</h2>
 
-  <!-- Search by First Name and/or Last Name -->
-  <div>
-    <label for="search-name-input">Search by First/Last Name:</label>
-    <input type="text" id="search-firstname-input" placeholder="Enter first name">
-    <input type="text" id="search-lastname-input" placeholder="Enter last name">
-    <button id="search-name-btn">Search by Name</button>
-  </div>
+    <!-- Search by First Name and/or Last Name -->
+    <div>
+        <label for="search-name-input">Search by First/Last Name:</label>
+        <input type="text" id="search-firstname-input" placeholder="Enter first name">
+        <input type="text" id="search-lastname-input" placeholder="Enter last name">
+        <button id="search-name-btn">Search by Name</button>
+    </div>
 
-  <!-- Search by User ID -->
-  <div>
-    <label for="search-id-input">Search by User ID:</label>
-    <input type="number" id="search-id-input" placeholder="Enter user ID">
-    <button id="search-id-btn">Search by User ID</button>
-  </div>
+    <!-- Search by User ID -->
+    <div>
+        <label for="search-id-input">Search by User ID:</label>
+        <input type="number" id="search-id-input" placeholder="Enter user ID">
+        <button id="search-id-btn">Search by User ID</button>
+    </div>
 
-  <!-- Search Users by Salary Range -->
-  <div>
-    <label for="search-salary-min-input">Salary between:</label>
-    <input type="number" id="search-salary-min-input" placeholder="Min salary">
-    <input type="number" id="search-salary-max-input" placeholder="Max salary">
-    <button id="search-salary-btn">Search by Salary</button>
-  </div>
+    <!-- Search Users by Salary Range -->
+    <div>
+        <label for="search-salary-min-input">Salary between:</label>
+        <input type="number" id="search-salary-min-input" placeholder="Min salary">
+        <input type="number" id="search-salary-max-input" placeholder="Max salary">
+        <button id="search-salary-btn">Search by Salary</button>
+    </div>
 
-  <!-- Search Users by Age Range -->
-  <div>
-    <label for="search-age-min-input">Age between:</label>
-    <input type="number" id="search-age-min-input" placeholder="Min age">
-    <input type="number" id="search-age-max-input" placeholder="Max age">
-    <button id="search-age-btn">Search by Age</button>
-  </div>
+    <!-- Search Users by Age Range -->
+    <div>
+        <label for="search-age-min-input">Age between:</label>
+        <input type="number" id="search-age-min-input" placeholder="Min age">
+        <input type="number" id="search-age-max-input" placeholder="Max age">
+        <button id="search-age-btn">Search by Age</button>
+    </div>
 
-  <!-- Search Users Registered After Another User -->
-  <div>
-    <label for="search-after-userid-input">Search users registered after:</label>
-    <input type="number" id="search-after-userid-input" placeholder="Enter user ID (e.g., john)">
-    <button id="search-after-userid-btn">Search Users Registered After</button>
-  </div>
+    <!-- Search Users Registered After Another User -->
+    <div>
+        <label for="search-after-userid-input">Search users registered after:</label>
+        <input type="number" id="search-after-userid-input" placeholder="Enter user ID (e.g., john)">
+        <button id="search-after-userid-btn">Search Users Registered After</button>
+    </div>
 
-  <!-- Search Users Who Never Signed In -->
-  <div>
-    <button id="search-never-signedin-btn">Search Users Who Never Signed In</button>
-  </div>
+    <!-- Search Users Who Never Signed In -->
+    <div>
+        <button id="search-never-signedin-btn">Search Users Who Never Signed In</button>
+    </div>
 
-  <!-- Search Users Registered on the Same Day as Another User -->
-  <div>
-    <label for="search-same-day-input">Search users who registered on the same day as:</label>
-    <input type="number" id="search-same-day-input" placeholder="Enter user ID (e.g., john)">
-    <button id="search-same-day-btn">Search by Registration Date</button>
-  </div>
+    <!-- Search Users Registered on the Same Day as Another User -->
+    <div>
+        <label for="search-same-day-input">Search users who registered on the same day as:</label>
+        <input type="number" id="search-same-day-input" placeholder="Enter user ID (e.g., john)">
+        <button id="search-same-day-btn">Search by Registration Date</button>
+    </div>
 
-</section>
+    </section>
 
+    <br>
 
     <!-- User Table -->
     <table id="user-table">
-      <thead>
-        <tr>
-          <th>Username</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Salary</th>
-          <th>Age</th>
-          <th>Registration Date</th>
-          <th>Last Sign In</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
+        <thead>
+            <tr>
+                <th>UserID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Salary</th>
+                <th>Age</th>
+                <th>Registration Date</th>
+                <th>Last Sign In</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
     </table>
 
     <!-- Update Row Section -->

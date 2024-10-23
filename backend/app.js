@@ -173,7 +173,9 @@ app.get('/searchRegisteredToday', (req, res) => {
     //error handling
     db.query(query, [date], (err, results) => {
         if (err) return res.status(500).send('Could not find users who registered today');
-        res.json(results);});});
+        res.json(results);
+    });
+});
 
 
 
@@ -212,37 +214,33 @@ app.get('/search/:name', (request, response) => { // we can debug by URL
 
 
 // update
-app.patch('/update', 
-     (request, response) => {
-          console.log("app: update is called");
-          //console.log(request.body);
-          const{id, name} = request.body;
-          console.log(id);
-          console.log(name);
-          const db = dbService.getDbServiceInstance();
+app.patch('/update', (request, response) => {
+    console.log("app: update is called");
+    //console.log(request.body);
+    const{id, name} = request.body;
+    console.log(id);
+    console.log(name);
+    const db = dbService.getDbServiceInstance();
 
-          const result = db.updateNameById(id, name);
+    const result = db.updateNameById(id, name);
 
-          result.then(data => response.json({success: true}))
-          .catch(err => console.log(err)); 
+    result.then(data => response.json({success: true}))
+    .catch(err => console.log(err)); 
 
-     }
-);
+});
 
 // delete service
-app.delete('/delete/:id', 
-     (request, response) => {     
-        const {id} = request.params;
-        console.log("delete");
-        console.log(id);
-        const db = dbService.getDbServiceInstance();
+app.delete('/delete/:id', (request, response) => {
+    const {id} = request.params;
+    console.log("delete");
+    console.log(id);
+    const db = dbService.getDbServiceInstance();
 
-        const result = db.deleteRowById(id);
+    const result = db.deleteRowById(id);
 
-        result.then(data => response.json({success: true}))
-        .catch(err => console.log(err));
-     }
-)   
+    result.then(data => response.json({success: true}))
+    .catch(err => console.log(err));
+})   
 
 // debug function, will be deleted later
 app.post('/debug', (request, response) => {
@@ -257,7 +255,6 @@ app.post('/debug', (request, response) => {
 // debug function: use http://localhost:5050/testdb to try a DB function
 // should be deleted finally
 app.get('/testdb', (request, response) => {
-    
     const db = dbService.getDbServiceInstance();
 
     

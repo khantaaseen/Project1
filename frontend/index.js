@@ -266,7 +266,7 @@ function insertRowIntoTable(data) {
         newRow.innerHTML = tableHtml;
     }
 
-    loadHTMLTablea(data);
+    loadHTMLTable(data);
 }
 
 function loadHTMLTable(data) {
