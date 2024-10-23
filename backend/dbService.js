@@ -52,7 +52,7 @@ class DbService{
    /*
      This code defines an asynchronous function getAllData using the async/await syntax. 
      The purpose of this function is to retrieve all data from a database table named 
-     "names" using a SQL query.
+     "Users" using a SQL query.
 
      Let's break down the code step by step:
          - async getAllData() {: This line declares an asynchronous function named getAllData.
@@ -81,7 +81,7 @@ class DbService{
     }: Closes the catch block.
 
     In summary, this function performs an asynchronous database query using await and a 
-   Promise to fetch all data from the "names" table. If the query is successful, 
+   Promise to fetch all data from the "Users" table. If the query is successful, 
    it returns the results; otherwise, it catches and logs any errors that occur 
    during the process. It's important to note that the await keyword is used here 
    to work with the asynchronous nature of the connection.query method, allowing 
@@ -92,7 +92,7 @@ class DbService{
            // use await to call an asynchronous function
            const response = await new Promise((resolve, reject) => 
               {
-                  const query = "SELECT * FROM names;";
+                  const query = "SELECT * FROM Users;";
                   connection.query(query, 
                        (err, results) => {
                              if(err) reject(new Error(err.message));
@@ -118,7 +118,7 @@ class DbService{
             // use await to call an asynchronous function
             const insertId = await new Promise((resolve, reject) => 
             {
-               const query = "INSERT INTO names (name, date_added) VALUES (?, ?);";
+               const query = "INSERT INTO Users (name, date_added) VALUES (?, ?);";
                connection.query(query, [name, dateAdded], (err, result) => {
                    if(err) reject(new Error(err.message));
                    else resolve(result.insertId);
@@ -144,7 +144,7 @@ class DbService{
              // use await to call an asynchronous function
              const response = await new Promise((resolve, reject) => 
                   {
-                     const query = "SELECT * FROM names where name = ?;";
+                     const query = "SELECT * FROM Users where name = ?;";
                      connection.query(query, [name], (err, results) => {
                          if(err) reject(new Error(err.message));
                          else resolve(results);
@@ -166,7 +166,7 @@ class DbService{
               // use await to call an asynchronous function
               const response = await new Promise((resolve, reject) => 
                   {
-                     const query = "DELETE FROM names WHERE id = ?;";
+                     const query = "DELETE FROM Users WHERE id = ?;";
                      connection.query(query, [id], (err, result) => {
                           if(err) reject(new Error(err.message));
                           else resolve(result.affectedRows);
@@ -192,7 +192,7 @@ class DbService{
            // use await to call an asynchronous function
            const response = await new Promise((resolve, reject) => 
                {
-                  const query = "UPDATE names SET name = ? WHERE id = ?;";
+                  const query = "UPDATE Users SET name = ? WHERE id = ?;";
                   connection.query(query, [newName, id], (err, result) => {
                        if(err) reject(new Error(err.message));
                        else resolve(result.affectedRows);

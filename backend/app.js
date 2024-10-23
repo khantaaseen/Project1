@@ -144,12 +144,6 @@ app.get('/searchRegisteredToday', (req, res) => {
 
 
 
-
-
-
-
-
-
 // read 
 app.get('/getAll', (request, response) => {
     

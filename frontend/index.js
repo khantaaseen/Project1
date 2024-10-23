@@ -247,8 +247,8 @@ const updateNameInput = document.getElementById('update-name-input');
 
 // Register User
 registerBtn.addEventListener('click', () => {
-    const username = document.getElementById('userName-input').value;
-    const password = document.getElementById('password-input').value;
+    const username = document.getElementById('register-name-input').value;
+    const password = document.getElementById('register-password-input').value;
     const firstName = document.getElementById('firstName-input').value;
     const lastName = document.getElementById('lastName-input').value;
     const age = document.getElementById('age-input').value;
@@ -265,8 +265,8 @@ registerBtn.addEventListener('click', () => {
     .then(data => {
         if (data.success) {
             alert('User registered successfully!');
-            document.getElementById('userName-input').value = '';
-            document.getElementById('password-input').value = '';
+            document.getElementById('register-name-input').value = '';
+            document.getElementById('register-password-input').value = '';
             document.getElementById('firstName-input').value = '';
             document.getElementById('lastName-input').value = '';
             document.getElementById('age-input').value = '';
