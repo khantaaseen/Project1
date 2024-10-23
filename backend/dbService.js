@@ -112,23 +112,27 @@ class DbService{
    }
 
 
-   async insertNewName(name){
+   async insertNewName(username, password, firstname, lastname, salary, age){
          try{
-            const dateAdded = new Date();
+            const registerday = new Date();
+            const signintime = '2024-10-23 09:30:00';
             // use await to call an asynchronous function
             const insertId = await new Promise((resolve, reject) => 
             {
-               const query = "INSERT INTO Users (name, date_added) VALUES (?, ?);";
-               connection.query(query, [name, dateAdded], (err, result) => {
+               const query = "INSERT INTO Users (username, password, firstname, lastname, salary, age, registerday, signintime) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+               connection.query(query, [username, password, firstname, lastname, salary, age, registerday, signintime], (err, result) => {
                    if(err) reject(new Error(err.message));
                    else resolve(result.insertId);
                });
             });
             console.log(insertId);  // for debugging to see the result of select
             return{
-                 id: insertId,
-                 name: name,
-                 dateAdded: dateAdded
+                 username: username,
+                 name: [firstname, lastname],
+                 age: age,
+                 salary: salary,
+                 dateAdded: registerday,
+                 signintime: signintime
             }
          } catch(error){
                console.log(error);

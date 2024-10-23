@@ -17,41 +17,35 @@ app.use(express.urlencoded({extended: false}));
 
 
 // create
-app.post('/insert', (request, response) => {
-    console.log("app: insert a row.");
-    // console.log(request.body); 
+// app.post('/insert', (request, response) => {
+//     console.log("app: insert a row.");
+//     // console.log(request.body); 
 
-    const {name} = request.body;
-    const db = dbService.getDbServiceInstance();
+//     const {name} = request.body;
+//     const db = dbService.getDbServiceInstance();
 
-    const result = db.insertNewName(name);
+//     const result = db.insertNewName(name);
  
-    // note that result is a promise
-    result 
-    .then(data => response.json({data: data})) // return the newly added row to frontend, which will show it
-   // .then(data => console.log({data: data})) // debug first before return by response
-   .catch(err => console.log(err));
-});
+//     // note that result is a promise
+//     result 
+//     .then(data => response.json({data: data})) // return the newly added row to frontend, which will show it
+//    // .then(data => console.log({data: data})) // debug first before return by response
+//    .catch(err => console.log(err));
+// });
 
 // Register endpoint
 app.post('/insert', (req, res) => {
+    console.log("app: insert a row.");
+
     const { username, password, firstname, lastname, age, salary } = req.body;
+    const db = dbService.getDbServiceInstance();
+    const result = db.insertNewName(username, password, firstname, lastname, salary, age);
 
-    // Define SQL query
-    const query = "INSERT INTO users (username, password, firstname, lastname, age, salary) VALUES (?, ?, ?, ?, ?, ?)";
-
-    // Execute SQL query
-    db.query(query, [username, password, firstname, lastname, age, salary], (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(500).json({ error: "Database error" });
-            return;
-        }
-
-        // Respond with the inserted data (returning an id from MySQL)
-        res.json({ data: { id: result.insertId, username, password, firstname, lastname, age, salary } });
-    });
+    result
+        .then(data => res.json({ data: data }))
+        .catch(err => console.log(err));
 });
+
 
 
 // sign in
@@ -70,6 +64,9 @@ app.post('/signin', (req, res) => {
             if (updateErr) return res.status(500).send('There was an error in updating the sign in time.');
             res.send('Sucessful sign in!');});});});
 
+
+
+
 // search query
 app.get('/search', (req, res) => {
     const { firstName, lastName } = req.query;
@@ -87,6 +84,9 @@ app.get('/search', (req, res) => {
         if (err) return res.status(500).send('There was an error searching for users');
         res.json(results);});});
 
+
+
+
 // search by ID
 app.get('/searchById/:userName', (req, res) => {
     const userName = req.params.userName;
@@ -96,6 +96,8 @@ app.get('/searchById/:userName', (req, res) => {
         if (err) return res.status(500).send('Could not find user through userid');
         res.json(results);});});
 
+
+
 // search by salary
 app.get('/searchBySalary', (req, res) => {
     const { minSalary, maxSalary } = req.query;
@@ -104,6 +106,10 @@ app.get('/searchBySalary', (req, res) => {
     db.query(query, [minSalary, maxSalary], (err, results) => {
         if (err) return res.status(500).send('There was an error searching for users by salary');
         res.json(results);});});
+
+
+
+
 // search by age
 app.get('/searchByAge', (req, res) => {
     const { minAge, maxAge } = req.query;
@@ -112,6 +118,10 @@ app.get('/searchByAge', (req, res) => {
     db.query(query, [minAge, maxAge], (err, results) => {
         if (err) return res.status(500).send('There was an error searching by age');
         res.json(results);});});
+
+
+
+
 // search for users who signed in after john
 app.get('/searchRegisteredAfter/:userName', (req, res) => {
     const userName = req.params.userName;
@@ -125,6 +135,9 @@ app.get('/searchRegisteredAfter/:userName', (req, res) => {
         db.query(query, [johnDate], (err, results) => {
             if (err) return res.status(500).send('Error, Could not find users for users who registered after John');
             res.json(results); });});});
+
+
+
 // no signin search   
 app.get('/searchNeverSignedIn', (req, res) => {
     const query = 'SELECT * FROM Users WHERE signInTime IS NULL';
@@ -132,6 +145,10 @@ app.get('/searchNeverSignedIn', (req, res) => {
     db.query(query, (err, results) => {
         if (err) return res.status(500).send('Could not find users who never signed in');
         res.json(results);});});
+
+
+
+
 // search for users who registered on the same day as john
 app.get('/searchRegisteredSameDay/:userName', (req, res) => {
     const samedaysignin = req.params.samedaysignin;
@@ -146,6 +163,9 @@ app.get('/searchRegisteredSameDay/:userName', (req, res) => {
         db.query(query, [johnDate], (err, results) => {
             if (err) return res.status(500).send('There was an error searching for users who registered on the same day as John');
             res.json(results); }); });});
+
+
+
 // register today search
 app.get('/searchRegisteredToday', (req, res) => {
     const date = new Date().toISOString().slice(0, 10); 
