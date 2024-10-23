@@ -216,21 +216,25 @@ function insertRowIntoTable(data) {
 
 function loadHTMLTable(data) {
     debug("index.js: loadHTMLTable called.");
-    const table = document.querySelector('table tbody'); 
-    
-    if(data.length === 0) {
-        table.innerHTML = "<tr><td class='no-data' colspan='5'>No Data</td></tr>";
+    const table = document.querySelector('table tbody');
+
+    if (data.length === 0) {
+        table.innerHTML = "<tr><td class='no-data' colspan='7'>No Data</td></tr>";
         return;
     }
 
     let tableHtml = "";
-    data.forEach(function ({id, name, date_added}) {
+    data.forEach(function ({ username, firstname, lastname, salary, age, registerday, signintime }) {
         tableHtml += "<tr>";
-        tableHtml +=`<td>${id}</td>`;
-        tableHtml +=`<td>${name}</td>`;
-        tableHtml +=`<td>${new Date(date_added).toLocaleString()}</td>`;
-        tableHtml +=`<td><button class="delete-row-btn" data-id=${id}>Delete</td>`;
-        tableHtml += `<td><button class="edit-row-btn" data-id=${id}>Edit</td>`;
+        tableHtml += `<td>${username}</td>`;
+        tableHtml += `<td>${firstname}</td>`;
+        tableHtml += `<td>${lastname}</td>`;
+        tableHtml += `<td>${salary}</td>`;
+        tableHtml += `<td>${age}</td>`;
+        tableHtml += `<td>${new Date(registerday).toLocaleDateString()}</td>`;
+        tableHtml += `<td>${new Date(signintime).toLocaleString()}</td>`;
+        tableHtml += `<td><button class="delete-row-btn" data-id=${username}>Delete</button></td>`;
+        tableHtml += `<td><button class="edit-row-btn" data-id=${username}>Edit</button></td>`;
         tableHtml += "</tr>";
     });
 
