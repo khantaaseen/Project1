@@ -69,26 +69,8 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(data => loadHTMLTable(data['data']));
 });
 
-// // When the addBtn is clicked
-// const addBtn = document.querySelector('#add-name-btn');
-// addBtn.onclick = function (){
-//     const nameInput = document.querySelector('#name-input');
-//     const name = nameInput.value;
-//     nameInput.value = "";
 
-//     fetch('http://localhost:5050/insert', {
-//         headers: {
-//             'Content-type': 'application/json'
-//         },
-//         method: 'POST',
-//         body: JSON.stringify({name: name})
-//     })
-//     .then(response => response.json())
-//     .then(data => insertRowIntoTable(data['data']));
-// }
-
-const addBtn = document.querySelector('#register-btn');
-addBtn.onclick = function () {
+document.querySelector('#register-btn').onclick = function () {
     const usernameInput = document.querySelector('#register-name-input');
     const passwordInput = document.querySelector('#register-password-input');
     const firstNameInput = document.querySelector('#firstName-input');
@@ -140,20 +122,111 @@ addBtn.onclick = function () {
     })
 };
 
-// When the searchBtn is clicked
-// const searchBtn =  document.querySelector('#search-btn');
-// searchBtn.onclick = function (){
-//     const searchInput = document.querySelector('#search-input');
-//     const searchValue = searchInput.value;
-//     searchInput.value = "";
+// Search by First Name and/or Last Name
+document.querySelector('#search-name-btn').onclick = function () {
+    const firstNameInput = document.querySelector('#search-firstname-input');
+    const lastNameInput = document.querySelector('#search-lastname-input');
+    const firstName = firstNameInput.value;
+    const lastName = lastNameInput.value;
+    firstNameInput.value = "";
+    lastNameInput.value = "";
 
-//     fetch('http://localhost:5050/search/' + searchValue)
-//     .then(response => response.json())
-//     .then(data => loadHTMLTable(data['data']));
-// }
+    console.log("this is index firstname " + firstName);
+    console.log("this is index lastname " + lastName);
+    
+
+    if (lastName === "") {
+        fetch(`http://localhost:5050/search/firstname/${firstName}`)
+        .then(response => response.json())
+        .then(data => loadHTMLTable(data['data']));
+        return;
+    }else if (firstName === "") {
+        fetch(`http://localhost:5050/search/lastname/${lastName}`)
+        .then(response => response.json())
+        .then(data => loadHTMLTable(data['data']));
+        return;
+    }else{
+        fetch(`http://localhost:5050/search/name/${firstName}/${lastName}`)
+        .then(response => response.json())
+        .then(data => loadHTMLTable(data['data']));
+    }
+    
+}
+
+// Search by User ID
+document.querySelector('#search-username-btn').onclick = function () {
+    const usernameInput = document.querySelector('#search-username-input');
+    const username = usernameInput.value;
+    usernameInput.value = "";
+
+    console.log("this is index username " + username);
+
+    fetch(`http://localhost:5050/search/username/${username}`)
+        .then(response => response.json())
+        .then(data => loadHTMLTable(data['data']));
+}
+
+// Search by Age Range
+document.querySelector('#search-age-btn').onclick = function () {
+    const minAgeInput = document.querySelector('#search-age-min-input');
+    const maxAgeInput = document.querySelector('#search-age-max-input');
+    const minAge = parseInt(minAgeInput.value);
+    const maxAge = parseInt(maxAgeInput.value);
+    minAgeInput.value = "";
+    maxAgeInput.value = "";
+
+    if (isNaN(minAge) || isNaN(maxAge)) {
+        alert("Please enter valid age values.");
+        return;
+    }
+
+    console.log("this is index age range " + (maxAge - minAge));
+
+    fetch(`http://localhost:5050/search/age/${minAge}/${maxAge}`)
+        .then(response => response.json())
+        .then(data => loadHTMLTable(data['data']));
+}
+
+
+// Search Users Registered After Another User
+document.querySelector('#search-after-username-btn').onclick = function () {
+    const afterUsernameInput = document.querySelector('#search-after-username-input');
+    const afterUsername = afterUsernameInput.value;
+    afterUsernameInput.value = "";
+
+    fetch(`http://localhost:5050/search/afterUsername/${afterUsername}`)
+        .then(response => response.json())
+        .then(data => loadHTMLTable(data['data']));
+}
+
+// Search Users Who Never Signed In
+document.querySelector('#search-never-signedin-btn').onclick = function () {
+    fetch(`http://localhost:5050/search/neverSignedIn`)
+        .then(response => response.json())
+        .then(data => loadHTMLTable(data['data']));
+}
+
+
+// Search Users Registered on the Same Day as Another User
+document.querySelector('#search-same-day-btn').onclick = function () {
+    const sameDayusernameInput = document.querySelector('#search-same-day-input');
+    const sameDayusername = sameDayusernameInput.value;
+    sameDayusernameInput.value = "";
+
+    fetch(`http://localhost:5050/search/sameDay/${sameDayusername}`)
+        .then(response => response.json())
+        .then(data => loadHTMLTable(data['data']));
+}
+
+// Search Users Registered Today
+document.querySelector('#return-today-btn').onclick = function () {
+    fetch('http://localhost:5050/search/today')
+        .then(response => response.json())
+        .then(data => loadHTMLTable(data['data']));
+}
+
 
 let rowToDelete; 
-
 // When the delete button is clicked, since it is not part of the DOM tree, we need to do it differently
 document.querySelector('table tbody').addEventListener('click', function(event){
     if(event.target.className === "delete-row-btn"){
@@ -301,30 +374,30 @@ function loadHTMLTable(data) {
 
 
 // Sign In User
-// if (signInBtn) {
-//     signInBtn.addEventListener('click', () => {
-//         const username = document.getElementById('userName-input').value;
-//         const password = document.getElementById('password-input').value;
+if (signInBtn) {
+    signInBtn.addEventListener('click', () => {
+        const username = document.getElementById('userName-input').value;
+        const password = document.getElementById('password-input').value;
 
-//         fetch('http://localhost:5050/signIn', {
-//             headers: {
-//                 'Content-type': 'application/json'
-//             },
-//             method: 'POST',
-//             body: JSON.stringify({username, password})
-//         })
-//         .then(response => response.json())
-//         .then(data => {
-//             if (data.success) {
-//                 alert('User signed in successfully!');
-//                 // Redirect or perform some action after successful sign-in
-//             } else {
-//                 alert('Sign-in failed. Please check your credentials.');
-//             }
-//         })
-//         .catch(error => {
-//             console.error('Error during sign-in:', error);
-//             alert('Sign-in failed. Please try again.');
-//         });
-//     });
-// }
+        fetch('http://localhost:5050/signIn', {
+            headers: {
+                'Content-type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({username, password})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('User signed in successfully!');
+                // Redirect or perform some action after successful sign-in
+            } else {
+                alert('Sign-in failed. Please check your credentials.');
+            }
+        })
+        .catch(error => {
+            console.error('Error during sign-in:', error);
+            alert('Sign-in failed. Please try again.');
+        });
+    });
+}

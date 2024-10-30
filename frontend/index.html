@@ -53,9 +53,9 @@
 
     <!-- Search by User ID -->
     <div>
-        <label for="search-id-input">Search by User ID:</label>
-        <input type="number" id="search-id-input" placeholder="Enter user ID">
-        <button id="search-id-btn">Search by User ID</button>
+        <label for="search-username-input">Search by Username:</label>
+        <input type="text" id="search-username-input" placeholder="Enter username">
+        <button id="search-username-btn">Search by Username</button>
     </div>
 
     <!-- Search Users by Salary Range -->
@@ -76,9 +76,9 @@
 
     <!-- Search Users Registered After Another User -->
     <div>
-        <label for="search-after-userid-input">Search users registered after:</label>
-        <input type="number" id="search-after-userid-input" placeholder="Enter user ID (e.g., john)">
-        <button id="search-after-userid-btn">Search Users Registered After</button>
+        <label for="search-after-username-input">Search users registered after:</label>
+        <input type="text" id="search-after-username-input" placeholder="Enter username (e.g., john)">
+        <button id="search-after-username-btn">Search Users Registered After</button>
     </div>
 
     <!-- Search Users Who Never Signed In -->
@@ -89,8 +89,12 @@
     <!-- Search Users Registered on the Same Day as Another User -->
     <div>
         <label for="search-same-day-input">Search users who registered on the same day as:</label>
-        <input type="number" id="search-same-day-input" placeholder="Enter user ID (e.g., john)">
+        <input type="text" id="search-same-day-input" placeholder="Enter user ID (e.g., john)">
         <button id="search-same-day-btn">Search by Registration Date</button>
+    </div>
+
+    <div>
+        <button id="return-today-btn">Todays Users</button>
     </div>
 
     </section>
