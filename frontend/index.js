@@ -221,11 +221,14 @@ document.querySelector('#search-after-username-btn').onclick = function () {
 }
 
 // Search Users Who Never Signed In
-document.querySelector('#search-never-signedin-btn').onclick = function () {
-    fetch(`http://localhost:5050/search/neverSignedIn`)
+document.querySelector('#search-never-signed-in-btn').onclick = function () {
+    loadHTMLTable([]); 
+    fetch('http://localhost:5050/search/neverSignedIn')
         .then(response => response.json())
-        .then(data => loadHTMLTable(data['data']));
+        .then(data => loadHTMLTable(data['data']))
+        .catch(error => console.error('Error fetching data:', error));
 }
+
 
 
 // Search Users Registered on the Same Day as Another User

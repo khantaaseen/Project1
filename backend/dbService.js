@@ -118,8 +118,7 @@ class DbService{
    async insertNewName(username, password, firstname, lastname, salary, age){
       try{
          const registerday = new Date();
-         const signintime = new Date().toISOString().slice(0, 19).replace('T', ' ');
-
+         const signintime = null;
          // use await to call an asynchronous function
          const insertId = await new Promise((resolve, reject) => 
          {
@@ -382,6 +381,18 @@ class DbService{
          console.log(error);
       }
    }
+   async searchUsersNeverSignedIn() {
+      return new Promise((resolve, reject) => {
+          const query = `SELECT * FROM users WHERE signintime != '1969-12-31 19:00:00'`;
+          db.all(query, [], (err, rows) => {
+              if (err) {
+                  reject(err);
+              }
+              resolve(rows);
+          });
+      });
+  }
+  
 }
 
 module.exports = DbService;
