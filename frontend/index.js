@@ -221,7 +221,8 @@ document.querySelector('#search-after-username-btn').onclick = function () {
 }
 
 // Search Users Who Never Signed In
-document.querySelector('#search-never-signed-in-btn').onclick = function () {
+document.querySelector('#search-never-signedin-btn').onclick = function () {
+    console.log("search never signed in");
     loadHTMLTable([]); 
     fetch('http://localhost:5050/search/neverSignedIn')
         .then(response => response.json())
@@ -278,7 +279,6 @@ function deleteRowById(name){
 }
 
 let idToUpdate = 0;
-
 function showEditRowInterface(id){
     debug("id clicked: ");
     debug(id);
@@ -391,10 +391,7 @@ function loadHTMLTable(data) {
     table.innerHTML = tableHtml;
 }
 
-
-
 // Sign In User
-
 document.querySelector("#signIn-btn").onclick = function () {
     const username = document.getElementById('signInUserName-input').value;
     const password = document.getElementById('signInPassword-input').value;

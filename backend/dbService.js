@@ -383,8 +383,9 @@ class DbService{
    }
    async searchUsersNeverSignedIn() {
       return new Promise((resolve, reject) => {
-          const query = `SELECT * FROM users WHERE signintime != '1969-12-31 19:00:00'`;
-          db.all(query, [], (err, rows) => {
+            console.log("searchUsersNeverSignedIn - db");
+          const query = `SELECT * FROM users WHERE signintime == '1969-12-31 19:00:00'`;
+          connection.query(query, [], (err, rows) => {
               if (err) {
                   reject(err);
               }

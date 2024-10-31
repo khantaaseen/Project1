@@ -159,6 +159,8 @@ app.get('/search/afterUsername/:username', (request, response) => {
 
 // Search Users Who Never Signed In
 app.get('/search/neverSignedIn', (request, response) => {
+
+    console.log("app: search users who never signed in");
     db = dbService.getDbServiceInstance();
     db.searchUsersNeverSignedIn()
         .then(data => response.json({ data: data }))
