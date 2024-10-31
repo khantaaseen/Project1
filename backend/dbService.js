@@ -146,6 +146,23 @@ class DbService{
       }
    }
 
+   async signIn(username, password){
+      try{
+
+         console.log("dbService signin: ", username, password);
+
+         const signintime = new Date().toISOString().slice(0, 19).replace('T', ' ');
+         const response = await new Promise((resolve, reject) => {
+            const query = " UPDATE Users SET signintime = ? WHERE username = ? AND password = ?;";
+            connection.query(query, [signintime, username, password], (err, results) => {
+               if(err) reject(new Error(err.message));
+               else resolve(results);
+            });
+         })
+      }catch(error){
+         console.log(error);
+      }
+   }
 
    async searchByName(firstname, lastname){
       try{
@@ -321,14 +338,13 @@ class DbService{
       }
    }
 
-   async deleteRowById(id){
+   async deleteRowById(name){
       try{
-            id = parseInt(id, 10);
             // use await to call an asynchronous function
             const response = await new Promise((resolve, reject) => 
                {
-                  const query = "DELETE FROM Users WHERE id = ?;";
-                  connection.query(query, [id], (err, result) => {
+                  const query = "DELETE FROM Users WHERE username = ?;";
+                  connection.query(query, [name], (err, result) => {
                         if(err) reject(new Error(err.message));
                         else resolve(result.affectedRows);
                   });
@@ -344,17 +360,16 @@ class DbService{
    }
 
   
-   async updateNameById(id, newName){
+   async updateNameById(name, newName){
       try{
             console.log("dbService: ");
-            console.log(id);
+            console.log(name);
             console.log(newName);
-            id = parseInt(id, 10);
             // use await to call an asynchronous function
             const response = await new Promise((resolve, reject) => 
                {
-                  const query = "UPDATE Users SET name = ? WHERE id = ?;";
-                  connection.query(query, [newName, id], (err, result) => {
+                  const query = "UPDATE Users SET username = ? WHERE name = ?;";
+                  connection.query(query, [newName, name], (err, result) => {
                         if(err) reject(new Error(err.message));
                         else resolve(result.affectedRows);
                   });

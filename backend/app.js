@@ -30,24 +30,19 @@ app.post('/insert', (req, res) => {
 });
 
 // sign in
-app.post('/signin', (req, res) => {
-    const { userName, password } = req.body;
-    const signInTime = new Date().toISOString().slice(0, 19).replace('T', ' '); // time and date
-    const query1 = 'SELECT * FROM Users WHERE userName = ? AND password = ?';
-    // query code
-    db.query(query1, [userName, password], (err, results) => {
-        if (err || results.length === 0) {
-            return res.status(401).send('Error, wrong credentials');}
+app.post('/signIn', (req, res) => {
+    const { username, password } = req.body;
+    const db = dbService.getDbServiceInstance();
 
-        // Update sign-in time query
-        const updatequery = 'UPDATE Users SET signInTime = ? WHERE userName = ?';
-        db.query(updatequery, [signInTime, userName], (updateErr) => { 
-            if (updateErr) return res.status(500).send('There was an error in updating the sign in time.');
-            res.send('Sucessful sign in!');
-        });
-    });
+    console.log("app: sign in", username, password);
+
+    const result = db.signIn(username, password);
+
+    result
+        .then(data => res.json({ data: data }))
+        .catch(err => console.log(err));
+
 });
-
 
 
 // read 
@@ -62,7 +57,6 @@ app.get('/getAll', (request, response) => {
     .then(data => response.json({data: data}))
     .catch(err => console.log(err));
 });
-
 
 app.get('/search/firstname/:firstname', (request, response) => { // we can debug by URL
     

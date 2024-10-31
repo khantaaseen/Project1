@@ -107,7 +107,7 @@ document.querySelector('#register-btn').onclick = function () {
         })
     })
     .then(response => {
-        console.log("after fetch'ing");
+        console.log("after fetching");
         return response.json();
     })
     .then(data => {
@@ -251,18 +251,18 @@ let rowToDelete;
 // When the delete button is clicked, since it is not part of the DOM tree, we need to do it differently
 document.querySelector('table tbody').addEventListener('click', function(event){
     if(event.target.className === "delete-row-btn"){
-        deleteRowById(event.target.dataset.id);   
+        deleteRowById(event.target.dataset.name);   
         rowToDelete = event.target.parentNode.parentNode.rowIndex;    
         debug("delete which one:");
         debug(rowToDelete);
     }   
     if(event.target.className === "edit-row-btn"){
-        showEditRowInterface(event.target.dataset.id); // display the edit row interface
+        showEditRowInterface(event.target.dataset.name); // display the edit row interface
     }
 });
 
-function deleteRowById(id){
-    fetch('http://localhost:5050/delete/' + id, { 
+function deleteRowById(name){
+    fetch('http://localhost:5050/delete/' + name, { 
         method: 'DELETE'
     })
     .then(response => response.json())
@@ -289,9 +289,7 @@ function showEditRowInterface(id){
 }
 
 // When the update button on the update interface is clicked
-const updateBtn = document.querySelector('#update-row-btn');
-
-updateBtn.onclick = function(){
+document.querySelector('#update-row-btn').onclick = function(){
     debug("update clicked");
     debug("got the id: ");
     debug(updateBtn.value);
@@ -392,33 +390,27 @@ function loadHTMLTable(data) {
 
 
 
-
-
 // Sign In User
-if (signInBtn) {
-    signInBtn.addEventListener('click', () => {
-        const username = document.getElementById('userName-input').value;
-        const password = document.getElementById('password-input').value;
 
-        fetch('http://localhost:5050/signIn', {
-            headers: {
-                'Content-type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify({username, password})
+document.querySelector("#signIn-btn").onclick = function () {
+    const username = document.getElementById('signInUserName-input').value;
+    const password = document.getElementById('signInPassword-input').value;
+
+    console.log("index - sign in", username, password);
+
+    fetch('http://localhost:5050/signIn', {
+        headers: {
+            'Content-type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({
+            username: username, 
+            password: password,
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('User signed in successfully!');
-                // Redirect or perform some action after successful sign-in
-            } else {
-                alert('Sign-in failed. Please check your credentials.');
-            }
-        })
-        .catch(error => {
-            console.error('Error during sign-in:', error);
-            alert('Sign-in failed. Please try again.');
-        });
+    })
+    .then(response => response.json())
+    .catch(error => {
+        console.error('Error during sign-in:', error);
+        alert('Sign-in failed. Please try again.');
     });
 }
