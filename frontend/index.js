@@ -166,6 +166,27 @@ document.querySelector('#search-username-btn').onclick = function () {
         .then(data => loadHTMLTable(data['data']));
 }
 
+// Search by Salary Range
+document.querySelector('#search-salary-btn').onclick = function () {
+    const minSalaryInput = document.querySelector('#search-salary-min-input');
+    const maxSalaryInput = document.querySelector('#search-salary-max-input');
+    const minSalary = parseFloat(minSalaryInput.value);
+    const maxSalary = parseFloat(maxSalaryInput.value);
+    minSalaryInput.value = "";
+    maxSalaryInput.value = "";
+
+    if (isNaN(minSalary) || isNaN(maxSalary)) {
+        alert("Please enter valid salary values.");
+        return;
+    }
+
+    console.log("this is index salary range " + (maxSalary - minSalary));
+
+    fetch(`http://localhost:5050/search/salary/${minSalary}/${maxSalary}`)
+        .then(response => response.json())
+        .then(data => loadHTMLTable(data['data']));
+}
+
 // Search by Age Range
 document.querySelector('#search-age-btn').onclick = function () {
     const minAgeInput = document.querySelector('#search-age-min-input');

@@ -139,7 +139,7 @@ class DbService{
             age: age,
             salary: salary,
             dateAdded: registerday,
-            signintime: signintime
+            signintime: signintime,
          }
       }catch(error){
          console.log(error);
