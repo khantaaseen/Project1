@@ -8,30 +8,13 @@ dotenv.config()
 
 const app = express();
 
-const dbService = require('./dbService');
+const dbService = require('./dbservice');
 
 
 app.use(cors());
 app.use(express.json())
 app.use(express.urlencoded({extended: false}));
 
-
-// create
-// app.post('/insert', (request, response) => {
-//     console.log("app: insert a row.");
-//     // console.log(request.body); 
-
-//     const {name} = request.body;
-//     const db = dbService.getDbServiceInstance();
-
-//     const result = db.insertNewName(name);
- 
-//     // note that result is a promise
-//     result 
-//     .then(data => response.json({data: data})) // return the newly added row to frontend, which will show it
-//    // .then(data => console.log({data: data})) // debug first before return by response
-//    .catch(err => console.log(err));
-// });
 
 // Register endpoint
 app.post('/insert', (req, res) => {
@@ -45,8 +28,6 @@ app.post('/insert', (req, res) => {
         .then(data => res.json({ data: data }))
         .catch(err => console.log(err));
 });
-
-
 
 // sign in
 app.post('/signin', (req, res) => {
@@ -62,118 +43,8 @@ app.post('/signin', (req, res) => {
         const updatequery = 'UPDATE Users SET signInTime = ? WHERE userName = ?';
         db.query(updatequery, [signInTime, userName], (updateErr) => { 
             if (updateErr) return res.status(500).send('There was an error in updating the sign in time.');
-            res.send('Sucessful sign in!');});});});
-
-
-
-
-// search query
-app.get('/search', (req, res) => {
-    const { firstName, lastName } = req.query;
-    let query = 'SELECT * FROM Users WHERE ';
-    const params = [];
-    if (firstName) {
-        query += 'firstName LIKE ? ';
-        params.push(`%${firstName}%`);}
-    if (lastName) {
-        if (firstName) query += 'AND ';
-        query += 'lastName LIKE ?';
-        params.push(`%${lastName}%`);}
-    // error handling 
-    db.query(query, params, (err, results) => {
-        if (err) return res.status(500).send('There was an error searching for users');
-        res.json(results);});});
-
-
-
-
-// search by ID
-app.get('/searchById/:userName', (req, res) => {
-    const userName = req.params.userName;
-    const query = 'SELECT * FROM Users WHERE userName = ?';
-    // error handling
-    db.query(query, [userName], (err, results) => {
-        if (err) return res.status(500).send('Could not find user through userid');
-        res.json(results);});});
-
-
-
-// search by salary
-app.get('/searchBySalary', (req, res) => {
-    const { minSalary, maxSalary } = req.query;
-    const query = 'SELECT * FROM Users WHERE salary BETWEEN ? AND ?';
-    // error handling
-    db.query(query, [minSalary, maxSalary], (err, results) => {
-        if (err) return res.status(500).send('There was an error searching for users by salary');
-        res.json(results);});});
-
-
-
-
-// search by age
-app.get('/searchByAge', (req, res) => {
-    const { minAge, maxAge } = req.query;
-    const query = 'SELECT * FROM Users WHERE age BETWEEN ? AND ?';
-    // error handling
-    db.query(query, [minAge, maxAge], (err, results) => {
-        if (err) return res.status(500).send('There was an error searching by age');
-        res.json(results);});});
-
-
-
-
-// search for users who signed in after john
-app.get('/searchRegisteredAfter/:userName', (req, res) => {
-    const userName = req.params.userName;
-    const getjohn = 'SELECT dayofregistration FROM Users WHERE userName = ?';
-    
-    db.query(getjohn, [userName], (err, result) => {
-        if (err || result.length === 0) return res.status(404).send('there are no users that match this search parameter');
-        const johnDate = result[0].dayofregistration;
-        const query = 'SELECT * FROM Users WHERE dayofregistration > ?';
-        // error handling
-        db.query(query, [johnDate], (err, results) => {
-            if (err) return res.status(500).send('Error, Could not find users for users who registered after John');
-            res.json(results); });});});
-
-
-
-// no signin search   
-app.get('/searchNeverSignedIn', (req, res) => {
-    const query = 'SELECT * FROM Users WHERE signInTime IS NULL';
-    // error handling
-    db.query(query, (err, results) => {
-        if (err) return res.status(500).send('Could not find users who never signed in');
-        res.json(results);});});
-
-
-
-
-// search for users who registered on the same day as john
-app.get('/searchRegisteredSameDay/:userName', (req, res) => {
-    const samedaysignin = req.params.samedaysignin;
-    const getjohn = 'SELECT dayofrgistration FROM Users WHERE userName = ?';
-    
-    db.query(getjohn, [samedaysignin], (err, result) => {
-        if (err || result.length === 0) return res.status(404).send('There are no users who registered at the same time as the given parameter');
-        
-        const johnDate = result[0].dayofregistration;
-        const query = 'SELECT * FROM Users WHERE dayofregistration = ?';
-        // error handling
-        db.query(query, [johnDate], (err, results) => {
-            if (err) return res.status(500).send('There was an error searching for users who registered on the same day as John');
-            res.json(results); }); });});
-
-
-
-// register today search
-app.get('/searchRegisteredToday', (req, res) => {
-    const date = new Date().toISOString().slice(0, 10); 
-    const query = 'SELECT * FROM Users WHERE dayofregistration = ?';
-    //error handling
-    db.query(query, [date], (err, results) => {
-        if (err) return res.status(500).send('Could not find users who registered today');
-        res.json(results);
+            res.send('Sucessful sign in!');
+        });
     });
 });
 
@@ -193,25 +64,130 @@ app.get('/getAll', (request, response) => {
 });
 
 
-app.get('/search/:name', (request, response) => { // we can debug by URL
+app.get('/search/firstname/:firstname', (request, response) => { // we can debug by URL
     
-    const {name} = request.params;
+    const { firstname } = request.params; // Corrected destructuring
     
-    console.log(name);
+    console.log("this is app name " + firstname);
 
     const db = dbService.getDbServiceInstance();
 
     let result;
-    if(name === "all") // in case we want to search all
+    if(firstname === "all" | firstname === "") // in case we want to search all
        result = db.getAllData()
     else 
-       result =  db.searchByName(name); // call a DB function
+       result =  db.searchByFirstName(firstname); // call a DB function
 
     result
     .then(data => response.json({data: data}))
     .catch(err => console.log(err));
 });
 
+app.get('/search/lastname/:lastname', (request, response) => { // we can debug by URL
+    
+    const { lastname } = request.params; // Corrected destructuring
+    
+    console.log("this is app name " + lastname);
+
+    const db = dbService.getDbServiceInstance();
+
+    let result;
+    if(lastname === "all" | lastname === "") // in case we want to search all
+       result = db.getAllData()
+    else 
+       result =  db.searchByLastName(lastname); // call a DB function
+
+    result
+    .then(data => response.json({data: data}))
+    .catch(err => console.log(err));
+});
+
+app.get('/search/name/:firstname/:lastname', (request, response) => {
+    const { firstname, lastname } = request.params;
+    console.log("this is app name " + firstname);
+    console.log("this is app name " + lastname);
+
+    const db = dbService.getDbServiceInstance();
+
+    let result;
+    if(firstname === "all" | firstname === "" && lastname === "all" | lastname === "") // in case we want to search all
+       result = db.getAllData()
+    else 
+       result =  db.searchByName(firstname, lastname); // call a DB function
+
+    result
+    .then(data => response.json({data: data}))
+    .catch(err => console.log(err));
+})
+
+
+// Search by User ID
+app.get('/search/username/:username', (request, response) => {
+    const { username } = request.params;
+
+    console.log("this is app username " + username);
+    db = dbService.getDbServiceInstance();
+    db.searchByUsername(username)
+        .then(data => response.json({ data: data }))
+        .catch(err => console.log(err));
+});
+
+// Search by Salary Range
+app.get('/search/salary/:min/:max', (request, response) => {
+    const { min, max } = request.params;
+
+    console.log("this is app salary " + (max - min));
+    db = dbService.getDbServiceInstance();
+    db.searchBySalaryRange(min, max)
+        .then(data => response.json({ data: data }))
+        .catch(err => console.log(err));
+});
+
+// Search by Age Range
+app.get('/search/age/:min/:max', (request, response) => {
+    const { min, max } = request.params;
+
+    console.log("this is app age " + (max - min));
+    db = dbService.getDbServiceInstance();
+    db.searchByAgeRange(min, max)
+        .then(data => response.json({ data: data }))
+        .catch(err => console.log(err));
+});
+
+// Search Users Registered After Another User
+app.get('/search/afterUsername/:username', (request, response) => {
+    const { username } = request.params;
+    const db = dbService.getDbServiceInstance();
+    db.searchAfterUsername(username)
+        .then(data => response.json({ data: data }))
+        .catch(err => console.log(err));
+});
+
+// Search Users Who Never Signed In
+app.get('/search/neverSignedIn', (request, response) => {
+    db = dbService.getDbServiceInstance();
+    db.searchUsersNeverSignedIn()
+        .then(data => response.json({ data: data }))
+        .catch(err => console.log(err));
+});
+
+// Search Users Registered on the Same Day as Another User
+app.get('/search/sameDay/:username', (request, response) => {
+
+    const { username } = request.params;
+    db = dbService.getDbServiceInstance();
+    db.searchUsersSameDay(username)
+        .then(data => response.json({ data: data }))
+        .catch(err => console.log(err));
+});
+
+// Search Users Registered Today
+app.get('/search/today', (request, response) => {
+    const db = dbService.getDbServiceInstance();
+    db.getUsersRegisteredToday()
+        .then(data => response.json({ data: data }))
+        .catch(err => console.log(err));
+});
 
 // update
 app.patch('/update', (request, response) => {
