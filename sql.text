@@ -1,0 +1,29 @@
+SELECT * FROM Users;
+INSERT INTO Users (username, password, firstname, lastname, salary, age, registerday, signintime) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+UPDATE Users SET signintime = ? WHERE username = ? AND password = ?;
+
+SELECT * FROM Users where firstname = ? AND lastname = ?;
+SELECT * FROM Users where firstname = ?;
+SELECT * FROM Users where lastname = ?;
+SELECT * FROM Users where username = ?;
+SELECT * FROM Users WHERE salary BETWEEN ? AND ?;
+SELECT * FROM Users WHERE age BETWEEN ? AND ?;
+
+SELECT * FROM Users 
+WHERE registerday > (
+    SELECT registerday FROM Users WHERE username = ?
+);
+
+SELECT * FROM Users 
+WHERE DATE(registerday) = (
+    SELECT DATE(registerday) FROM Users WHERE username = ?
+);
+
+SELECT * FROM Users WHERE DATE(registerday) = ?;
+
+DELETE FROM Users WHERE username = ?;
+
+UPDATE Users SET username = ? WHERE name = ?;
+
+SELECT * FROM users WHERE signintime == '1969-12-31 19:00:00'
+
