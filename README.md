@@ -1,11 +1,11 @@
 # Project1 Database
-This project is a simple user management system built with Node.js, Express, and MySQL. It allows users to register, view user data, and search users based on specific criteria. This readme for the project will walk you through setting up, deploying, and running the project on your local device. This was developed by Taaseen Khan and Ammar Ahmed.
+This project is a simple user management system built with Node.js, Express, Cors, and MySQL. It allows users to register, view user data, and search users based on specific criteria. This readme for the project will walk you through setting up, deploying, and running the project on your local device. This was developed by Taaseen Khan and Ammar Ahmed.
 
 Prerequisites required: 
 Before starting, make sure you have the following installed:
 
-Node.js,
-MySQL or Xampp,
+Node.js, Express.js, Nodemon, Cors
+MySQL or Xampp
 Git for cloning
 
 Project Setup
