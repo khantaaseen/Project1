@@ -222,15 +222,11 @@ document.querySelector('#search-after-username-btn').onclick = function () {
 
 // Search Users Who Never Signed In
 document.querySelector('#search-never-signedin-btn').onclick = function () {
-    console.log("search never signed in");
-    loadHTMLTable([]); 
     fetch('http://localhost:5050/search/neverSignedIn')
         .then(response => response.json())
         .then(data => loadHTMLTable(data['data']))
         .catch(error => console.error('Error fetching data:', error));
-}
-
-
+} 
 
 // Search Users Registered on the Same Day as Another User
 document.querySelector('#search-same-day-btn').onclick = function () {
@@ -279,6 +275,7 @@ function deleteRowById(name){
 }
 
 let idToUpdate = 0;
+
 function showEditRowInterface(id){
     debug("id clicked: ");
     debug(id);
@@ -391,7 +388,10 @@ function loadHTMLTable(data) {
     table.innerHTML = tableHtml;
 }
 
+
+
 // Sign In User
+
 document.querySelector("#signIn-btn").onclick = function () {
     const username = document.getElementById('signInUserName-input').value;
     const password = document.getElementById('signInPassword-input').value;

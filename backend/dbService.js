@@ -119,6 +119,7 @@ class DbService{
       try{
          const registerday = new Date();
          const signintime = null;
+
          // use await to call an asynchronous function
          const insertId = await new Promise((resolve, reject) => 
          {
@@ -320,22 +321,39 @@ class DbService{
       }
    }
 
-   async getUsersRegisteredToday() {
-      try {
-         const today = new Date().toISOString().slice(0, 10);
-         const response = await new Promise((resolve, reject) => {
-            const query = "SELECT * FROM Users WHERE DATE(registerday) = ?;";
-            connection.query(query, [today], (err, results) => {
-               if (err) reject(new Error(err.message));
-               else resolve(results);
-            });
-         });
+   async searchUsersNeverSignedIn() {
+      return new Promise((resolve, reject) => {
+          const query = `SELECT * FROM users WHERE signintime = '1969-12-31 19:00:00' OR signintime IS NULL;`;
+          connection.query(query, [], (err, rows) => {
+              if (err) {
+                  reject(err);
+              }
+              resolve(rows);
+          });
+      });
+  }
 
-         return response;
-      } catch (error) {
-         console.log(error);
-      }
+  async getUsersRegisteredToday() {
+   try {
+       const response = await new Promise((resolve, reject) => {
+           const query = "SELECT * FROM Users WHERE DATE(registerday) = CURDATE()"; // CURDATE() handles today's date directly i think
+           connection.query(query, (err, results) => {
+               if (err) {
+                   reject(new Error(`Database query failed: ${err.message}`));
+               } else {
+                   console.log("Query Results:", results); // taaseen help
+                   resolve(results);
+               }
+           });
+       });
+
+       return response;
+   } catch (error) {
+       console.error("Error fetching today's registered users:", error);
+       return []; // Return an empty array if there's an error
    }
+}
+
 
    async deleteRowById(name){
       try{
@@ -381,19 +399,6 @@ class DbService{
          console.log(error);
       }
    }
-   async searchUsersNeverSignedIn() {
-      return new Promise((resolve, reject) => {
-            console.log("searchUsersNeverSignedIn - db");
-          const query = `SELECT * FROM users WHERE signintime == '1969-12-31 19:00:00'`;
-          connection.query(query, [], (err, rows) => {
-              if (err) {
-                  reject(err);
-              }
-              resolve(rows);
-          });
-      });
-  }
-  
 }
 
 module.exports = DbService;

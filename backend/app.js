@@ -159,8 +159,6 @@ app.get('/search/afterUsername/:username', (request, response) => {
 
 // Search Users Who Never Signed In
 app.get('/search/neverSignedIn', (request, response) => {
-
-    console.log("app: search users who never signed in");
     db = dbService.getDbServiceInstance();
     db.searchUsersNeverSignedIn()
         .then(data => response.json({ data: data }))
@@ -178,7 +176,7 @@ app.get('/search/sameDay/:username', (request, response) => {
 });
 
 // Search Users Registered Today
-app.get('/search/today', (request, response) => {
+app.get('/search/today', (_, response) => {
     const db = dbService.getDbServiceInstance();
     db.getUsersRegisteredToday()
         .then(data => response.json({ data: data }))
